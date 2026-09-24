@@ -1,1 +1,71 @@
 
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Alexandria</title>
+    <style>
+      #library {
+        background-color: black;
+        width: 500px;
+        height: 250px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 2px;
+      }
+
+      .book {
+        background: linear-gradient(
+          90deg, 
+          rgba(var(--book-color, 42, 123, 155), 0.75) 0%, 
+          rgba(var(--book-color, 42, 123, 155), 1) 50%, 
+          rgba(var(--book-color, 42, 123, 155), 0.75) 100%
+        );
+        width: 50px;
+        height: 200px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        flex-flow: column nowrap;
+      }
+      .red   { --book-color: 204, 40, 40; }
+      .green { --book-color: 40, 160, 0; }
+      .blue  { --book-color: 0, 119, 182; }
+
+      .book >p {
+        color: white;
+        transform: rotate(90deg);
+      }
+      .book > div {
+        height: 5px;
+        box-sizing: border-box;
+        width: 100%;
+
+        background: linear-gradient(90deg,
+          rgba(255,255,255, 0.5) 0%, 
+          rgba(255,255,255, 0.85) 50%, 
+          rgba(255,255,255, 0.5) 100%);
+      }
+    </style>
+  </head>
+  <body>
+      <div id="library">
+        <div class="book green">
+          <div></div>
+          <p>TITLE</p>
+          <div></div>
+        </div>
+        <div class="book blue">
+          <div></div>
+          <p>ROBOX</p>
+          <div></div>
+        </div>
+        <div class="book red">
+          <div></div>
+          <p>MAGICS</p>
+          <div></div>
+        </div>
+      </div>
+  </body>
+</html>
