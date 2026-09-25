@@ -1,12 +1,15 @@
-
 <!DOCTYPE html>
 <html>
   <head>
     <title>Alexandria</title>
     <style>
+      body{
+        margin: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      }
       #library {
         background-color: black;
-        width: 500px;
+        width: 400px;
         height: 250px;
 
         display: flex;
@@ -16,55 +19,128 @@
       }
 
       .book {
-        background: linear-gradient(
-          90deg, 
-          rgba(var(--book-color, 42, 123, 155), 0.75) 0%, 
-          rgba(var(--book-color, 42, 123, 155), 1) 50%, 
-          rgba(var(--book-color, 42, 123, 155), 0.75) 100%
-        );
+        background: rgba(var(--book-color, 42, 123, 155), 1);
+        box-shadow: inset 10px 0 15px -5px rgba(0, 0, 0, 0.25), 
+            inset -10px 0 15px -5px rgba(0, 0, 0, 0.25);
         width: 50px;
         height: 200px;
+        box-sizing: border-box;
+
         display: flex;
+        flex-flow: column nowrap;
         justify-content: space-around;
         align-items: center;
-        flex-flow: column nowrap;
+
+        transform-origin: bottom center;
+        transform-style: preserve-3d;
+        transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s ease;
       }
       .red   { --book-color: 204, 40, 40; }
       .green { --book-color: 40, 160, 0; }
       .blue  { --book-color: 0, 119, 182; }
 
-      .book >p {
-        color: white;
-        transform: rotate(90deg);
+      .book:hover{
+        /* 
+          rotateX(36deg): Pulls the top forward and down
+          rotateY(14deg): Twists it slightly clockwise, exposing the left cover surface
+          rotateZ(-5deg): Renders the actual sideways roll/lazy tilt over to the left
+        */
+        transform: rotateX(-24deg) rotateY(-14deg) rotateZ(-5deg);
+        
+        /* Offsets the shadow to match the direction of the physical tilt 
+        box-shadow: -20px 35px 50px rgba(0, 0, 0, 0.55);*/
       }
-      .book > div {
+
+      .book p {
+        color: var(--parchment-color);
+        transform: rotate(90deg);
+        width: 150px;
+        text-align: center;
+      }
+      .spineDecor {
         height: 5px;
         box-sizing: border-box;
         width: 100%;
 
         background: linear-gradient(90deg,
-          rgba(255,255,255, 0.5) 0%, 
-          rgba(255,255,255, 0.85) 50%, 
-          rgba(255,255,255, 0.5) 100%);
+          color-mix(in srgb, var(--parchment-color) 50%, transparent) 0%, 
+          color-mix(in srgb, var(--parchment-color) 85%, transparent) 50%, 
+          color-mix(in srgb, var(--parchment-color) 50%, transparent) 100%);
+      }
+
+      :root{
+        --book-page-width: 50px; /* Surface depth of the book cover inside the shelf */
+        --book-page-width-mod: 2.2;
+        --parchment-color: #FCF5E5;
+        --goldleaf-color: #f3e5ab;
+      }
+      .bookPageSide{
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: var(--book-page-width); 
+        height: 100%;
+        background-color: rgb(var(--book-color)); 
+
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: space-around;
+        align-items: center;
+      }
+      .bookPageSideTop{
+        background: var(--parchment-color); 
+        height: var(--book-page-width); 
+        width: 100%;
+        
+        box-shadow: inset 10px -10px 20px rgba(0,0,0,0.5);
+        transform-origin: top center;
+        transform: rotateX(-90deg) translateZ(5px) scaleY(var(--book-page-width-mod));
+      }
+      .bookPageSideLeft{
+        box-shadow: inset -10px 0 20px rgba(0,0,0,0.5);
+        transform-origin: left center;
+        transform: rotateY(90deg) scaleX(var(--book-page-width-mod));
+      }
+      .bookPageSideRight{
+        box-shadow: inset 10px 0 20px rgba(0,0,0,0.5);
+        transform-origin: right center;
+        transform: rotateY(-90.8deg) scaleX(var(--book-page-width-mod));
+      }
+      .book:hover .bookPageSideRight{
+        transform: rotateY(-90deg) scaleX(var(--book-page-width-mod));
       }
     </style>
   </head>
   <body>
       <div id="library">
         <div class="book green">
-          <div></div>
+          <div class="bookPageSide bookPageSideTop"></div>
+          <div class="bookPageSide bookPageSideLeft"><div class="spineDecor"></div></div>
+          <div class="spineDecor"></div>
           <p>TITLE</p>
-          <div></div>
+          <div class="spineDecor"></div>
+          <div class="bookPageSide bookPageSideRight">
+            <div class="spineDecor"></div>
+            <p>.</p>
+            <div class="spineDecor"></div>
+          </div>
         </div>
         <div class="book blue">
-          <div></div>
-          <p>ROBOX</p>
-          <div></div>
+          <div class="bookPageSide bookPageSideTop"></div>
+          <div class="bookPageSide bookPageSideLeft"></div>
+          <div class="spineDecor"></div>
+          <p>TITLE</p>
+          <div class="spineDecor"></div>
+          <div class="bookPageSide bookPageSideRight"></div>
         </div>
         <div class="book red">
-          <div></div>
-          <p>MAGICS</p>
-          <div></div>
+          <div class="bookPageSide bookPageSideTop"></div>
+          <div class="bookPageSide bookPageSideLeft"></div>
+          <div class="spineDecor"></div>
+          <p>TITLE</p>
+          <div class="spineDecor"></div>
+          <div class="bookPageSide bookPageSideRight"></div>
         </div>
       </div>
   </body>
