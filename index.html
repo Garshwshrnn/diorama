@@ -179,7 +179,7 @@
       .green { --book-color: 139, 149, 86; }
       .blue  { --book-color: 119, 150, 203; }
 
-      .book:hover{
+      .book:not(.no-hover):hover{
         /*transform: rotateX(-24deg) rotateY(-14deg) rotateZ(-5deg) translateY(var(--y-bookSelectAnim-diff));
         /*animation: cuteWobble 5s ease-in-out infinite;
         animation-delay: 0.2s;*/
@@ -286,7 +286,7 @@
   </head>
   <body>
     <div id="library">
-        <div class="book green" onclick="document.getElementById('library').classList.add('rotateOut'); console.log('ksdfk')">
+        <div class="book green">
           <div class="bookPageSide bookPageSideTop"></div>
           <div class="bookPageSide bookPageSideLeft"><div class="spineDecor"></div></div>
           <div class="spineDecor"></div>
@@ -331,7 +331,7 @@
         <div class="shelf-face shelf-back">
 
       </div>
-      <script>
+      <script id="wobbleHoverScript">
         document.querySelectorAll('.book').forEach(book => {
           let wobbleTimer, enteredTimer = null;
 
@@ -371,21 +371,31 @@
           function isBookEntered(){
             return book.entered;
           }
-          async function runAfterTrue(func) {
-            await waitUntilTrue(() => {return !isBookEntered()});
+          async function runAfterTrue(checkFunc, func) {
+            await waitUntilTrue(checkFunc);
             func();
           }
 
           book.addEventListener('mouseleave', () => {
             book.left = true;
 
-            runAfterTrue(() => {
+            runAfterTrue(() => {return !isBookEntered()}, 
+            () => {
               book.style.animation = '';
               book.style.transform = "";
             });
           });
         });
       </script>
+      <script id="bookSelectionScript">
+        document.querySelectorAll('.book').forEach(book => {
+          book.addEventListener('click', () => {
+            document.getElementById('library').classList.add('rotateOut');
+            this.dispatchEvent(new MouseEvent('mouseleave'));
 
+            
+          });
+        });
+      </script>
   </body>
 </html>
