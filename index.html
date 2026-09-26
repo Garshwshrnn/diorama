@@ -2,28 +2,167 @@
 <html>
   <head>
     <title>Alexandria</title>
-    <style>
+    <style id="libraryStyle">
+      :root{
+        --shelf-w: 500px;
+        --shelf-h: 270px;
+        --shelf-d: 300px;
+        --x-diff: 20px;
+        --y-diff: 23.5px;
+        --book-w: 50px;
+        --book-h: 200px;
+      }
+      p {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !im;
+      }
       body{
         margin: 0;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      }
-      #library {
-        background-color: black;
-        width: 400px;
-        height: 250px;
 
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 2px;
+
+        height: 60vh;
+
+        background-image: 
+          radial-gradient( 
+            circle,
+            #FFF5F5,
+            #FFF5F5,
+            var(--parchment-color),
+            #EBE6D5);
+        background-size: 100vw 100vh;
+      }
+      #library {
+        background-color: colorless;
+        width: var(--shelf-w);
+        height: var(--shelf-h);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+
+        transform-style: preserve-3d;
+        transform: rotateX(-5deg) rotateY(-5deg) translateY(100px);
       }
 
+      .shelf-face {
+        position: absolute;
+        
+        background-color: #433E3F;
+        /*background-image: url(http://www.transparenttextures.com/patterns/wood-pattern.png);
+        background-size: 100px 100px; 
+        background-repeat: repeat; */
+        /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+
+        /* Base wood color 
+        background-color: #8b5a2b; 
+        background-image: 
+          repeating-linear-gradient(
+            1deg,
+            rgba(255, 255, 255, 0.05) 0px,
+            rgba(255, 255, 255, 0.05) 2px,
+            transparent 2px,
+            transparent 4px
+          ),
+          linear-gradient(90deg, #6b4423, #8b5a2b, #5c3a21);*/
+        box-sizing: border-box;
+      }
+      .shelf-back {
+        width: var(--shelf-w);
+        height: var(--shelf-h);
+        transform: translateZ(calc(var(--shelf-d) * -1));
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        gap: 20px;
+        padding-bottom: 20px;
+        box-shadow: inset 0 calc(var(--shelf-h)/1.7) 100px rgba(0,0,0,0.4);
+      }
+
+      /* Wooden Bottom Shelf Base board */
+      .shelf-bottom {
+        width: var(--shelf-w);
+        height: var(--shelf-d);
+        transform-origin: bottom center;
+        transform: rotateX(90deg) translateZ(var(--y-diff));
+        bottom: 0;
+        box-shadow: inset 0 30px 120px rgba(0,0,0,0.6);
+      }
+      .shelf-front{
+        width: var(--shelf-w);
+        height: var(--shelf-h);
+        transform-origin: bottom center;
+      
+        bottom: 0;
+        box-shadow: 
+          inset 0 5px 20px rgba(0,0,0,0.2),
+          inset 0 -6px 20px rgba(0,0,0,0.2);
+        
+        clip-path: polygon(
+          100% 100%, 0% 100%, 0% 0%, 100% 0%,
+          100% 100%, 
+          
+          calc(var(--shelf-w) - var(--x-diff) - 0.5px) calc(var(--shelf-h) - var(--y-diff) - 0.5px),
+          calc(var(--shelf-w) - var(--x-diff) - 0.5px) var(--y-diff),
+          calc(var(--x-diff) + 0.5px) var(--y-diff), 
+          calc(var(--x-diff) + 0.5px) calc(var(--shelf-h) - var(--y-diff) - 0.5px), 
+          calc(var(--shelf-w) - var(--x-diff) - 0.5px) calc(var(--shelf-h) - var(--y-diff) - 0.5px)
+        );
+        clip-rule: evenodd; 
+      }
+
+      /* Wooden Top Cap */
+      .shelf-top {
+        width: var(--shelf-w);
+        height: var(--shelf-d);
+        transform-origin: top center;
+        
+        box-shadow: inset 0 -150px 100px rgba(0,0,0,0.24);
+        transform: rotateX(-90deg) translateY(-3px);
+        top: 0;
+      }
+
+      /* Wooden Left Side Wall */
+      .shelf-left {
+        width: var(--shelf-d);
+        height: var(--shelf-h);
+        transform-origin: left center;
+        
+        bottom: 0;
+        box-shadow: 
+          inset 0 -50px 50px rgba(0,0,0,0.26),
+          inset 0 50px 50px rgba(0,0,0,0.43);
+        transform: rotateY(90deg) translateZ(var(--x-diff));
+        left: 0;
+      }
+
+      /* Wooden Right Side Wall */
+      .shelf-right {
+        width: var(--shelf-d);
+        height: var(--shelf-h);
+        transform-origin: right center;
+
+        box-shadow: inset 0 -50px 50px rgba(0,0,0,0.2);
+        transform: rotateY(-90deg) translateX(2px);
+        right: 0;
+      }
+    </style>
+    <style id="bookStyle">
+      :root{
+        --y-bookSelectAnim-diff: -5px;
+        --x-bookSelectAnim-diff: 0px;
+        --z-bookSelectAnim-diff: 50px;
+      }
       .book {
+        margin-top: calc( (var(--shelf-h) - var(--book-h) - 25px - 5px) / 2);
+
         background: rgba(var(--book-color, 42, 123, 155), 1);
         box-shadow: inset 10px 0 15px -5px rgba(0, 0, 0, 0.25), 
-            inset -10px 0 15px -5px rgba(0, 0, 0, 0.25);
-        width: 50px;
-        height: 200px;
+          inset -10px 0 15px -5px rgba(0, 0, 0, 0.25);
+        width: var(--book-w);
+        height: var(--book-h);
         box-sizing: border-box;
 
         display: flex;
@@ -34,22 +173,37 @@
         transform-origin: bottom center;
         transform-style: preserve-3d;
         transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s ease;
+        transform: rotateX(-0deg) rotateY(-0deg) rotateZ(-0deg) translateY(0);
       }
-      .red   { --book-color: 204, 40, 40; }
-      .green { --book-color: 40, 160, 0; }
-      .blue  { --book-color: 0, 119, 182; }
+      .red   { --book-color: 219, 138, 116; }
+      .green { --book-color: 139, 149, 86; }
+      .blue  { --book-color: 119, 150, 203; }
 
       .book:hover{
-        /* 
-          rotateX(36deg): Pulls the top forward and down
-          rotateY(14deg): Twists it slightly clockwise, exposing the left cover surface
-          rotateZ(-5deg): Renders the actual sideways roll/lazy tilt over to the left
-        */
-        transform: rotateX(-24deg) rotateY(-14deg) rotateZ(-5deg);
-        
-        /* Offsets the shadow to match the direction of the physical tilt 
-        box-shadow: -20px 35px 50px rgba(0, 0, 0, 0.55);*/
+        /*transform: rotateX(-24deg) rotateY(-14deg) rotateZ(-5deg) translateY(var(--y-bookSelectAnim-diff));
+        /*animation: cuteWobble 5s ease-in-out infinite;
+        animation-delay: 0.2s;*/
       }
+
+      /* Gentle, decaying sway animation */
+      @keyframes cuteWobble {
+        0%  { transform: rotateX(-24deg) rotateY(-14deg) rotateZ(-5deg) translateY(var(--y-bookSelectAnim-diff)) translateX(var(--x-bookSelectAnim-diff)) translateZ(var(--z-bookSelectAnim-diff)); }
+        25%  { transform: rotateX(-24deg) rotateY(-10deg) rotateZ(-3deg) translateY(var(--y-bookSelectAnim-diff)) translateX(var(--x-bookSelectAnim-diff)) translateZ(var(--z-bookSelectAnim-diff)); }
+        50%  { transform: rotateX(-24deg) rotateY(-14deg) rotateZ(-5deg) translateY(var(--y-bookSelectAnim-diff)) translateX(var(--x-bookSelectAnim-diff)) translateZ(var(--z-bookSelectAnim-diff)); }
+        75%  { transform: rotateX(-24deg) rotateY(-13deg) rotateZ(-4deg) translateY(var(--y-bookSelectAnim-diff)) translateX(var(--x-bookSelectAnim-diff)) translateZ(var(--z-bookSelectAnim-diff)); }
+        100% { transform: rotateX(-24deg) rotateY(-14deg) rotateZ(-5deg) translateY(var(--y-bookSelectAnim-diff)) translateX(var(--x-bookSelectAnim-diff)) translateZ(var(--z-bookSelectAnim-diff)); }
+      }
+      /*
+      #library:hover{
+        animation: spinWobble 8s ease-in-out infinite;
+      }
+      @keyframes spinWobble {
+        0%  { transform: rotateX(-5deg) rotateY(-5deg); }
+        25%  { transform: rotateX(-5deg)  rotateY(-6deg); }
+        50%  { transform: rotateX(-5deg)  rotateY(-5deg); }
+        75%  { transform: rotateX(-5deg)  rotateY(-4deg); }
+        100%  { transform: rotateX(-5deg)  rotateY(-5deg); }
+      }*/
 
       .book p {
         color: var(--parchment-color);
@@ -58,8 +212,8 @@
         text-align: center;
       }
       .spineDecor {
-        height: 5px;
         box-sizing: border-box;
+        height: 5px;
         width: 100%;
 
         background: linear-gradient(90deg,
@@ -71,7 +225,7 @@
       :root{
         --book-page-width: 50px; /* Surface depth of the book cover inside the shelf */
         --book-page-width-mod: 2.2;
-        --parchment-color: #FCF5E5;
+        --parchment-color: #f8f6f0;
         --goldleaf-color: #f3e5ab;
       }
       .bookPageSide{
@@ -87,6 +241,11 @@
         flex-flow: column nowrap;
         justify-content: space-around;
         align-items: center;
+
+        transition: transform 0.6s linear;
+      }
+      .bookPageSide p{
+        transform: scaleX(calc(1/1000000.7));
       }
       .bookPageSideTop{
         background: var(--parchment-color); 
@@ -111,10 +270,35 @@
         transform: rotateY(-90deg) scaleX(var(--book-page-width-mod));
       }
     </style>
+    <style id="onSelectBookStyles">
+      #library{
+        transition: transform 2s;
+      }
+      .rotateOut{
+        transform-style: preserve-3d;
+        transform: rotateX(-90deg) !important;
+        transform-origin: top center;
+      }
+      .rotateOpen{
+
+      }
+    </style>
   </head>
   <body>
-      <div id="library">
-        <div class="book green">
+    <div id="library">
+        <div class="book green" onclick="document.getElementById('library').classList.add('rotateOut'); console.log('ksdfk')">
+          <div class="bookPageSide bookPageSideTop"></div>
+          <div class="bookPageSide bookPageSideLeft"><div class="spineDecor"></div></div>
+          <div class="spineDecor"></div>
+          <p>TITLE</p>
+          <div class="spineDecor"></div>
+          <div class="bookPageSide bookPageSideRight">
+            <div class="spineDecor"></div>
+            <p style="transform: scaleX(calc(1/1000000.7)) rotateY(180deg)">.</p>
+            <div class="spineDecor"></div>
+          </div>
+        </div>
+        <div class="book blue">
           <div class="bookPageSide bookPageSideTop"></div>
           <div class="bookPageSide bookPageSideLeft"><div class="spineDecor"></div></div>
           <div class="spineDecor"></div>
@@ -126,22 +310,82 @@
             <div class="spineDecor"></div>
           </div>
         </div>
-        <div class="book blue">
-          <div class="bookPageSide bookPageSideTop"></div>
-          <div class="bookPageSide bookPageSideLeft"></div>
-          <div class="spineDecor"></div>
-          <p>TITLE</p>
-          <div class="spineDecor"></div>
-          <div class="bookPageSide bookPageSideRight"></div>
-        </div>
         <div class="book red">
           <div class="bookPageSide bookPageSideTop"></div>
-          <div class="bookPageSide bookPageSideLeft"></div>
+          <div class="bookPageSide bookPageSideLeft"><div class="spineDecor"></div></div>
           <div class="spineDecor"></div>
           <p>TITLE</p>
           <div class="spineDecor"></div>
-          <div class="bookPageSide bookPageSideRight"></div>
+          <div class="bookPageSide bookPageSideRight">
+            <div class="spineDecor"></div>
+            <p>.</p>
+            <div class="spineDecor"></div>
+          </div>
         </div>
+        
+        <div class="shelf-face shelf-top"></div>
+        <div class="shelf-face shelf-bottom"></div>
+        <div class="shelf-face shelf-front"></div>
+        <div class="shelf-face shelf-left"></div>
+        <div class="shelf-face shelf-right"></div>
+        <div class="shelf-face shelf-back">
+
       </div>
+      <script>
+        document.querySelectorAll('.book').forEach(book => {
+          let wobbleTimer, enteredTimer = null;
+
+          book.addEventListener('mouseenter', () => {
+            book.entered = true;
+            book.left = false;
+            clearTimeout(enteredTimer);
+
+            book.style.transform = "rotateX(-24deg) rotateY(-14deg) rotateZ(-5deg) translateY(var(--y-bookSelectAnim-diff)) translateX(var(--x-bookSelectAnim-diff)) translateZ(var(--z-bookSelectAnim-diff))";
+            wobbleTimer = setTimeout(() => {
+              if(!book.left){
+                book.style.animation = 'cuteWobble 0.8s ease-in-out 1';
+              }
+              else{
+                clearTimeout(enteredTimer);
+                book.entered = false;
+              }
+            }, 200);
+
+            enteredTimer = setTimeout(() => {
+              book.entered = false;
+            }, 1000);
+          });
+
+          function waitUntilTrue(varGetter, interval = 100) {
+            return new Promise((resolve) => {
+              function check() {
+                if (varGetter()) {
+                  resolve();
+                } else {
+                  setTimeout(check, interval);
+                }
+              }
+              check();
+            });
+          }
+          function isBookEntered(){
+            return book.entered;
+          }
+          async function runAfterTrue(func) {
+            await waitUntilTrue(() => {return !isBookEntered()});
+            func();
+          }
+
+          book.addEventListener('mouseleave', () => {
+            book.left = true;
+
+            runAfterTrue(() => {
+              book.style.animation = '';
+              book.style.transform = "";
+            });
+          });
+        });
+      </script>
+
   </body>
 </html>
