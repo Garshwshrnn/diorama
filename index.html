@@ -16,6 +16,9 @@
         font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !im;
       }
       body{
+        user-select: none;
+        -webkit-touch-callout: none;
+
         margin: 0;
 
         display: flex;
@@ -172,7 +175,7 @@
 
         transform-origin: bottom center;
         transform-style: preserve-3d;
-        transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s ease;
+        transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s ease, translate 1.6s;
         transform: rotateX(-0deg) rotateY(-0deg) rotateZ(-0deg) translateY(0);
       }
       .red   { --book-color: 219, 138, 116; }
@@ -242,7 +245,8 @@
         justify-content: space-around;
         align-items: center;
 
-        transition: transform 0.6s linear;
+        transform-style: preserve-3d;
+        transition: transform 0.6s linear, scale 1.6s, height 1.6s, top 0.8s;
       }
       .bookPageSide p{
         transform: scaleX(calc(1/1000000.7));
@@ -254,7 +258,8 @@
         
         box-shadow: inset 10px -10px 20px rgba(0,0,0,0.5);
         transform-origin: top center;
-        transform: rotateX(-90deg) translateZ(5px) scaleY(var(--book-page-width-mod));
+        transform: rotateX(-90deg) translateZ(5px);
+        scale: 1 1 var(--book-page-width-mod);
       }
       .bookPageSideLeft{
         box-shadow: inset -10px 0 20px rgba(0,0,0,0.5);
@@ -264,15 +269,73 @@
       .bookPageSideRight{
         box-shadow: inset 10px 0 20px rgba(0,0,0,0.5);
         transform-origin: right center;
-        transform: rotateY(-90.8deg) scaleX(var(--book-page-width-mod));
-      }
-      .book:hover .bookPageSideRight{
         transform: rotateY(-90deg) scaleX(var(--book-page-width-mod));
       }
     </style>
+    <style id="insidePageStyle">
+      .insidePage {
+        position: absolute;
+        width: calc(var(--book-w) * 1);
+        height: calc(var(--book-h) - 10px);
+        background-color: var(--parchment-color);
+        
+        left: 0%;
+        top: 5px;
+        transform-style: preserve-3d;
+        transition: transform 1.4s, translate 1.4s;
+
+        box-sizing: border-box;
+        padding: 0px;
+        display: flex;
+        justify-content: flex-start;
+        flex-flow: column nowrap;
+
+        color: #000000;
+      }
+      .insidePage p {
+        color: black;
+        font-size: 7pt;
+
+        width: 100px;
+        position: absolute;
+        
+        translate: -25px;
+        transform: scaleX(calc(1/var(--book-page-width-mod)));
+      }
+      .insidePage.left{
+        transform-origin: left center;
+        transform: translateZ(1px) scaleX(0.96) ;/*scaleX(0.1);
+        translate: calc(1 * var(--book-w) / var(--book-page-width-mod)) 0;*/
+      }
+      /*.rotateOut .insidePage.left{
+        transform: translateZ(1px) scaleY(0.99) scaleX(1.2);
+        translate: calc(-1 * var(--book-w) / 2 / var(--book-page-width-mod)) 0;
+      }*/
+      .insidePage.right{
+        justify-content: flex-end;
+        transform-origin: right center;
+        transform: translateZ(1px) scaleX(0.96) rotateX(180deg);
+      }
+      .insidePage.right p{
+        transform: scaleX(calc(1/var(--book-page-width-mod))) rotateX(180deg);
+      }
+      .insidePage.middle{
+        --w: calc(var(--book-w) / 1);
+        padding: 0;
+        width: var(--w);
+
+        transform-style: preserve-3d;
+        transform-origin: center center;
+        transform: translateZ(-1px);
+      }
+      .rotateOut .insidePage.middle{
+        transform: translateZ(-1px);
+      }
+
+    </style>
     <style id="onSelectBookStyles">
       #library{
-        transition: transform 2s;
+        transition: transform 2.7s;
       }
       .rotateOut{
         transform-style: preserve-3d;
@@ -280,46 +343,105 @@
         transform-origin: top center;
       }
       .rotateOpen{
-
+        transition: transform 1.6s;
+        transform: rotateX(-90deg) rotateY(0deg) rotateZ(180deg) translateY(300px) translateX(var(--x-bookSelectAnim-diff)) translateZ(var(--z-bookSelectAnim-diff));
+      }
+      .rotateOpen .bookPageSideTop{
+        transform: rotateX(0deg) translateZ(-1px);
+        box-shadow: 0 0 0;
+        height: 0px;
+        top: 10px;
+      }
+      .rotateOpen .bookPageSideLeft{
+        transform: rotateY(180deg) scaleX(var(--book-page-width-mod));
+      }
+      .rotateOpen .bookPageSideRight{
+        transform: rotateY(-180deg) scaleX(var(--book-page-width-mod));
       }
     </style>
   </head>
   <body>
     <div id="library">
-        <div class="book green">
+        <div class="book green ">
           <div class="bookPageSide bookPageSideTop"></div>
-          <div class="bookPageSide bookPageSideLeft"><div class="spineDecor"></div></div>
-          <div class="spineDecor"></div>
-          <p>TITLE</p>
-          <div class="spineDecor"></div>
-          <div class="bookPageSide bookPageSideRight">
-            <div class="spineDecor"></div>
-            <p style="transform: scaleX(calc(1/1000000.7)) rotateY(180deg)">.</p>
-            <div class="spineDecor"></div>
-          </div>
-        </div>
-        <div class="book blue">
-          <div class="bookPageSide bookPageSideTop"></div>
-          <div class="bookPageSide bookPageSideLeft"><div class="spineDecor"></div></div>
-          <div class="spineDecor"></div>
-          <p>TITLE</p>
-          <div class="spineDecor"></div>
-          <div class="bookPageSide bookPageSideRight">
+          <div class="bookPageSide bookPageSideLeft">
+              <div class="insidePage left">
+                <p>Use justify-content again to help these frogs get to their lilypads. Remember that this CSS property aligns items horizontally and accepts the following values:
+
+flex-start: Items align to the left side of the container.
+flex-end: Items align to the right side of the container.
+center: Items align at the center of the container.</p>
+              </div>
+
             <div class="spineDecor"></div>
             <p>.</p>
             <div class="spineDecor"></div>
           </div>
-        </div>
-        <div class="book red">
-          <div class="bookPageSide bookPageSideTop"></div>
-          <div class="bookPageSide bookPageSideLeft"><div class="spineDecor"></div></div>
           <div class="spineDecor"></div>
           <p>TITLE</p>
           <div class="spineDecor"></div>
+            <div class="insidePage middle">
+            </div>
           <div class="bookPageSide bookPageSideRight">
             <div class="spineDecor"></div>
             <p>.</p>
             <div class="spineDecor"></div>
+
+              <div class="insidePage right">
+                <p>Some text goes here</p>
+              </div>
+          </div>
+        </div>
+        <div class="book blue ">
+          <div class="bookPageSide bookPageSideTop"></div>
+          <div class="bookPageSide bookPageSideLeft">
+              <div class="insidePage left">
+                <p>Some text goes here</p>
+              </div>
+
+            <div class="spineDecor"></div>
+            <p>.</p>
+            <div class="spineDecor"></div>
+          </div>
+          <div class="spineDecor"></div>
+          <p>TITLE</p>
+          <div class="spineDecor"></div>
+            <div class="insidePage middle">
+            </div>
+          <div class="bookPageSide bookPageSideRight">
+            <div class="spineDecor"></div>
+            <p>.</p>
+            <div class="spineDecor"></div>
+
+              <div class="insidePage right">
+                <p>Some text goes here</p>
+              </div>
+          </div>
+        </div>
+        <div class="book red ">
+          <div class="bookPageSide bookPageSideTop"></div>
+          <div class="bookPageSide bookPageSideLeft">
+              <div class="insidePage left">
+                <p>Some text goes here</p>
+              </div>
+
+            <div class="spineDecor"></div>
+            <p>.</p>
+            <div class="spineDecor"></div>
+          </div>
+          <div class="spineDecor"></div>
+          <p>TITLE</p>
+          <div class="spineDecor"></div>
+            <div class="insidePage middle">
+            </div>
+          <div class="bookPageSide bookPageSideRight">
+            <div class="spineDecor"></div>
+            <p>.</p>
+            <div class="spineDecor"></div>
+
+              <div class="insidePage right">
+                <p>Some text goes here</p>
+              </div>
           </div>
         </div>
         
@@ -328,14 +450,41 @@
         <div class="shelf-face shelf-front"></div>
         <div class="shelf-face shelf-left"></div>
         <div class="shelf-face shelf-right"></div>
-        <div class="shelf-face shelf-back">
+        <div class="shelf-face shelf-back"></div>
+    </div>
 
-      </div>
       <script id="wobbleHoverScript">
+        let numberOfBooks = 0;
+        function waitUntilTrue(varGetter, interval = 100) {
+          return new Promise((resolve) => {
+            function check() {
+              if (varGetter()) {
+                resolve();
+              } else {
+                setTimeout(check, interval);
+              }
+            }
+            check();
+          });
+        }
+        async function runAfterTrue(checkFunc, func) {
+          await waitUntilTrue(checkFunc);
+          func();
+        }
+        function isBookEntered(book){
+          return book.entered;
+        }
+
         document.querySelectorAll('.book').forEach(book => {
+          numberOfBooks++;
+          book.orderOfBook = numberOfBooks;
+          
+          book.selected = false;
           let wobbleTimer, enteredTimer = null;
 
-          book.addEventListener('mouseenter', () => {
+          book.addEventListener('pointerenter', () => {
+            if(book.selected) return;
+
             book.entered = true;
             book.left = false;
             clearTimeout(enteredTimer);
@@ -356,31 +505,13 @@
             }, 1000);
           });
 
-          function waitUntilTrue(varGetter, interval = 100) {
-            return new Promise((resolve) => {
-              function check() {
-                if (varGetter()) {
-                  resolve();
-                } else {
-                  setTimeout(check, interval);
-                }
-              }
-              check();
-            });
-          }
-          function isBookEntered(){
-            return book.entered;
-          }
-          async function runAfterTrue(checkFunc, func) {
-            await waitUntilTrue(checkFunc);
-            func();
-          }
-
-          book.addEventListener('mouseleave', () => {
+          book.addEventListener('pointerleave', () => {
             book.left = true;
 
-            runAfterTrue(() => {return !isBookEntered()}, 
+            runAfterTrue(() => {return !isBookEntered(book)}, 
             () => {
+              if(book.selected) return;
+
               book.style.animation = '';
               book.style.transform = "";
             });
@@ -390,10 +521,36 @@
       <script id="bookSelectionScript">
         document.querySelectorAll('.book').forEach(book => {
           book.addEventListener('click', () => {
-            document.getElementById('library').classList.add('rotateOut');
-            this.dispatchEvent(new MouseEvent('mouseleave'));
+            book.selected = true;
 
-            
+            document.getElementById('library').classList.add('rotateOut');
+            let orderTimer, selectedTimer = null;
+            book.addEventListener('pointerleave', () => {
+              book.left = true;
+
+              book.style.transition = 'transform 1.6s, box-shadow 0.6s ease, translate 1.6s';
+
+              runAfterTrue(() => {return !isBookEntered(book)}, 
+              () => {
+                book.style.animation = '';
+                book.style.transform = "";
+                //book.style.transform = "rotateX(-24deg) rotateY(-14deg) rotateZ(-5deg) translateY(var(--y-bookSelectAnim-diff)) translateX(var(--x-bookSelectAnim-diff)) translateZ(var(--z-bookSelectAnim-diff))";
+                
+                selectedTimer = setTimeout(() => {
+                  var translateDist = (book.orderOfBook-Math.floor(numberOfBooks/2)-1)*(-70); //this 70 is not dynaimcally obtained lol
+                  console.log(book.orderOfBook);
+                  console.log(numberOfBooks);
+                  console.log(translateDist);
+                  book.style.translate = translateDist+"px";
+                  book.orderOfBook
+                  /*book.style.offsetHeight;
+                  book.style.transform = "rotateX(24deg) rotateY(-14deg) rotateZ(-5deg) translateY(var(--y-bookSelectAnim-diff)) translateX(var(--x-bookSelectAnim-diff)) translateZ(var(--z-bookSelectAnim-diff))";*/
+                  book.classList.add('rotateOpen');
+                }, 1);
+              });
+            });
+
+            book.dispatchEvent(new MouseEvent('pointerleave'));
           });
         });
       </script>
