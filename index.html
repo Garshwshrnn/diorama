@@ -36,6 +36,8 @@
             var(--parchment-color),
             #EBE6D5);
         background-size: 100vw 100vh;
+
+        transition: zoom 0.3s;
       }
       #library {
         background-color: colorless;
@@ -213,12 +215,23 @@
         color: var(--parchment-color);
         transform: rotate(90deg);
         width: 150px;
-        text-align: center;
+        text-align: center; 
+      }
+      .titleText{
+        letter-spacing: 3px;
+      }
+      .insidePage.right p{
+        text-align: left; 
+        
+      }
+      .insidePage.left p{
+        text-align: right; 
       }
       .spineDecor {
         box-sizing: border-box;
         height: 5px;
         width: 100%;
+
 
         background: linear-gradient(90deg,
           color-mix(in srgb, var(--parchment-color) 50%, transparent) 0%, 
@@ -363,7 +376,7 @@
     </style>
     <style id="zoomStyle">
       .zoomBtn{
-        width: 40px;height: 40px;
+        width: 45px;height: 40px;
 
         position: fixed;
         right: 10px;
@@ -375,11 +388,11 @@
     </style>
   </head>
   <body id="body">
-    <button id="zoomInBtn" class="zoomBtn" onclick="document.getElementById('body').style.zoom = (parseFloat(document.getElementById('body').style.zoom) || 1) + 0.1">
-      [+]
+    <button id="zoomInBtn" class="zoomBtn" disabled onclick="document.getElementById('body').style.zoom = (parseFloat(document.getElementById('body').style.zoom) || 1) + 0.1">
+      [🔎+]
     </button>
-    <button id="zoomOutBtn" class="zoomBtn" onclick="document.getElementById('body').style.zoom = (parseFloat(document.getElementById('body').style.zoom) || 1) - 0.1">
-      [–]
+    <button id="zoomOutBtn" class="zoomBtn" disabled onclick="document.getElementById('body').style.zoom = (parseFloat(document.getElementById('body').style.zoom) || 1) - 0.1">
+      [🔎–]
     </button>
 
     <div id="library">
@@ -387,11 +400,7 @@
           <div class="bookPageSide bookPageSideTop"></div>
           <div class="bookPageSide bookPageSideLeft">
               <div class="insidePage left">
-                <p>Use justify-content again to help these frogs get to their lilypads. Remember that this CSS property aligns items horizontally and accepts the following values:
-
-flex-start: Items align to the left side of the container.
-flex-end: Items align to the right side of the container.
-center: Items align at the center of the container.</p>
+                <p> ng hustisya habang si Tony ay nagpasya na siya ang maghahatid ng hustisya, ang siyang magsasagawa nito. Sa huli, pinatay ni Regina si Tony sa kanyang galit, pinarusahan siya para sa pagpatay ngunit narin din na siya ay masama kaya naman sumuko siya sa pulisya. Ito ay isang parallel sa sariling...</p>
               </div>
 
             <div class="spineDecor"></div>
@@ -399,7 +408,7 @@ center: Items align at the center of the container.</p>
             <div class="spineDecor"></div>
           </div>
           <div class="spineDecor"></div>
-          <p>TITLE</p>
+          <p class="titleText">ESILO</p>
           <div class="spineDecor"></div>
             <div class="insidePage middle">
             </div>
@@ -409,7 +418,7 @@ center: Items align at the center of the container.</p>
             <div class="spineDecor"></div>
 
               <div class="insidePage right">
-                <p>Some text goes here</p>
+                <p>Binigyang-diin ni Rogelio Sikat ang kahulugan ng hustisya. Kahit na tila hindi na ito darating dahil sa korapsyon sa kanilang lungsod, parehong naisip nina Regina at Tony na mabibigyan ng hustisya. Ang kabataan ay mapagpasyahan ni Regina na hihintayin ang batas na magsilbi</p>
               </div>
           </div>
         </div>
@@ -417,7 +426,9 @@ center: Items align at the center of the container.</p>
           <div class="bookPageSide bookPageSideTop"></div>
           <div class="bookPageSide bookPageSideLeft">
               <div class="insidePage left">
-                <p>Some text goes here</p>
+                <p>Sometimes, Love dances around each other, and in the end turns into something greater than the sum of its parts.
+
+Love has its own goldilocks zone. We may never be absolutely certain of it, not in the way you're certain when holding an object. But without love, life becomes a little lack luster.</p>
               </div>
 
             <div class="spineDecor"></div>
@@ -425,7 +436,7 @@ center: Items align at the center of the container.</p>
             <div class="spineDecor"></div>
           </div>
           <div class="spineDecor"></div>
-          <p>TITLE</p>
+          <p class="titleText"><span style="font-size: 14px; color: rgba(0,0,0,0)">.</span> IRON CORES <span style="font-size:1px;">.</span></p>
           <div class="spineDecor"></div>
             <div class="insidePage middle">
             </div>
@@ -435,7 +446,11 @@ center: Items align at the center of the container.</p>
             <div class="spineDecor"></div>
 
               <div class="insidePage right">
-                <p>Some text goes here</p>
+                <p>Love is like the stars.
+
+Sometimes, we see it clearly. Sometimes it's bright, sometimes it's burned up all but iron. Sometimes, it twinkles and fades away. But if we saw them up close, we can see the very real supermassive that has its own gravitational pull.
+
+Love is warm, love is hot and bright. Love is something we can use to guide us when we're lost. </p>
               </div>
           </div>
         </div>
@@ -443,7 +458,8 @@ center: Items align at the center of the container.</p>
           <div class="bookPageSide bookPageSideTop"></div>
           <div class="bookPageSide bookPageSideLeft">
               <div class="insidePage left">
-                <p>Some text goes here</p>
+                <iframe src="https://giphy.com/embed/Dh5q0sShxgp13DwrvG" width="120" height="75" style="transform: scaleX(0.41) translateX(-85px) translateY(12px);" frameBorder="0" class="giphy-embed"></iframe>
+                <iframe src="https://giphy.com/embed/xULW8vRQrlIPRfiEog" width="120" height="80" style="transform: scaleX(0.41) translateX(-85px) translateY(25px);" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
               </div>
 
             <div class="spineDecor"></div>
@@ -451,7 +467,7 @@ center: Items align at the center of the container.</p>
             <div class="spineDecor"></div>
           </div>
           <div class="spineDecor"></div>
-          <p>TITLE</p>
+          <p class="titleText">CANIS</p>
           <div class="spineDecor"></div>
             <div class="insidePage middle">
             </div>
@@ -461,7 +477,21 @@ center: Items align at the center of the container.</p>
             <div class="spineDecor"></div>
 
               <div class="insidePage right">
-                <p>Some text goes here</p>
+                <p>
+                  Through all my years, I've yet to see anyone quite like you. Our lives change so much but our friendship only really is before and after we talked at 5 AM. 
+                  <br>
+                  <br>
+                  To more hours and years, 
+                  <br>
+                  theology and appscript, 
+                  <br>
+                  To your health, my dearest Chloe,
+                  <br>
+                  Forever yours, Jaden
+                  <br>
+                  <span style="font-size: 6.7px;">p.s yes i kno the font is ass
+                    </span>
+                  </p>
               </div>
           </div>
         </div>
@@ -541,6 +571,32 @@ center: Items align at the center of the container.</p>
           });
         });
       </script>
+
+      <script id="zoomScript">
+        let zib = document.getElementById('zoomInBtn');
+        let zob = document.getElementById('zoomOutBtn');
+        let body = document.getElementById('body');
+
+        let zoomFactor = 1;
+
+        function enableZoomBtns(enabled){
+          zib.disabled = enabled;
+          zob.disabled = enabled;
+          console.log('yazzz ' + enabled);
+        }
+        document.querySelectorAll('.book').forEach(book => {
+          book.addEventListener('click', () => {
+            if(aBookIsBeingSelected) return;
+            if(!book.selected){
+              body.style.zoom = zoomFactor;
+            }else{
+              zoomFactor = body.style.zoom;
+              body.style.zoom = 1;
+            }
+            enableZoomBtns(book.selected);
+          });
+        });
+      </script>
       <script id="bookSelectionScript">
         function handleBookPointerLeave(book) {
           book.left = true;
@@ -556,9 +612,9 @@ center: Items align at the center of the container.</p>
               // Note: 70 is not dynamically obtained
               var translateDist = (book.orderOfBook - Math.floor(numberOfBooks / 2) - 1) * (-70); 
               
-              console.log(book.orderOfBook);
+              /*console.log(book.orderOfBook);
               console.log(numberOfBooks);
-              console.log(translateDist);
+              console.log(translateDist);*/
               
               book.style.translate = translateDist + "px";
               book.classList.add('rotateOpen');
