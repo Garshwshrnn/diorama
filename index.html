@@ -296,6 +296,7 @@
       .insidePage p {
         color: black;
         font-size: 7pt;
+        font-family: d;
 
         width: 100px;
         position: absolute;
@@ -456,6 +457,7 @@ center: Items align at the center of the container.</p>
 
       <script id="wobbleHoverScript">
         let numberOfBooks = 0;
+        let aBookIsBeingSelected = false;
         function waitUntilTrue(varGetter, interval = 100) {
           return new Promise((resolve) => {
             function check() {
@@ -481,10 +483,11 @@ center: Items align at the center of the container.</p>
           book.orderOfBook = numberOfBooks;
           
           book.selected = false;
+          book.beingUnselected = false;
           let wobbleTimer, enteredTimer = null;
 
           book.addEventListener('pointerenter', () => {
-            if(book.selected) return;
+            if(book.selected || aBookIsBeingSelected) return;
 
             book.entered = true;
             book.left = false;
@@ -520,38 +523,68 @@ center: Items align at the center of the container.</p>
         });
       </script>
       <script id="bookSelectionScript">
+        function handleBookPointerLeave(book) {
+          book.left = true;
+          book.style.transition = 'transform 1.6s, box-shadow 0.6s ease, translate 1.6s';
+          
+          runAfterTrue(() => {
+            return !isBookEntered(book);
+          }, () => {
+            book.style.animation = '';
+            book.style.transform = "";
+            
+            selectedTimer = setTimeout(() => {
+              // Note: 70 is not dynamically obtained
+              var translateDist = (book.orderOfBook - Math.floor(numberOfBooks / 2) - 1) * (-70); 
+              
+              console.log(book.orderOfBook);
+              console.log(numberOfBooks);
+              console.log(translateDist);
+              
+              book.style.translate = translateDist + "px";
+              book.classList.add('rotateOpen');
+
+              otherBooksSelectedTimer = setTimeout(() => {
+                aBookIsBeingSelected = false;
+              }, 1600);
+            }, 1);
+          });
+        }
+
         document.querySelectorAll('.book').forEach(book => {
+          book.leaveHandler = () => handleBookPointerLeave(book);
+
           book.addEventListener('click', () => {
-            book.selected = true;
+            if(aBookIsBeingSelected) return;
+            if(!book.selected){
+              aBookIsBeingSelected = true;
+              book.selected = true;
 
-            document.getElementById('library').classList.add('rotateOut');
-            let orderTimer, selectedTimer = null;
-            book.addEventListener('pointerleave', () => {
+              document.getElementById('library').classList.add('rotateOut');
+              let orderTimer, selectedTimer, otherBooksSelectedTimer = null;
+              book.addEventListener('pointerleave', book.leaveHandler);
+
+              book.dispatchEvent(new MouseEvent('pointerleave'));
+            }
+            else{
+              if(book.beingUnselected) return;
+              book.beingUnselected = true;
+              //undo everything
+              document.getElementById('library').classList.remove('rotateOut');
+              let orderTimer, selectedTimer, otherBooksSelectedTimer = null;
+
+              book.removeEventListener('pointerleave', book.leaveHandler);
+
               book.left = true;
-
-              book.style.transition = 'transform 1.6s, box-shadow 0.6s ease, translate 1.6s';
-
-              runAfterTrue(() => {return !isBookEntered(book)}, 
-              () => {
-                book.style.animation = '';
-                book.style.transform = "";
-                //book.style.transform = "rotateX(-24deg) rotateY(-14deg) rotateZ(-5deg) translateY(var(--y-bookSelectAnim-diff)) translateX(var(--x-bookSelectAnim-diff)) translateZ(var(--z-bookSelectAnim-diff))";
-                
-                selectedTimer = setTimeout(() => {
-                  var translateDist = (book.orderOfBook-Math.floor(numberOfBooks/2)-1)*(-70); //this 70 is not dynaimcally obtained lol
-                  console.log(book.orderOfBook);
-                  console.log(numberOfBooks);
-                  console.log(translateDist);
-                  book.style.translate = translateDist+"px";
-                  book.orderOfBook
-                  /*book.style.offsetHeight;
-                  book.style.transform = "rotateX(24deg) rotateY(-14deg) rotateZ(-5deg) translateY(var(--y-bookSelectAnim-diff)) translateX(var(--x-bookSelectAnim-diff)) translateZ(var(--z-bookSelectAnim-diff))";*/
-                  book.classList.add('rotateOpen');
-                }, 1);
-              });
-            });
-
-            book.dispatchEvent(new MouseEvent('pointerleave'));
+              book.style.translate = '';
+              book.style.transition = 'transform 1.6s, box-shadow 0.6s ease, translate 0.6s';
+              selectedTimer = setTimeout(() => {
+                book.removeAttribute('style');
+                book.selected = false;
+                book.beingUnselected = false;
+              }, 1610);
+              book.classList.remove('rotateOpen');
+            }
           });
         });
       </script>
