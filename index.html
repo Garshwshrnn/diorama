@@ -296,7 +296,7 @@
       .insidePage p {
         color: black;
         font-size: 7pt;
-        font-family: d;
+        font-family: Bradley Hand, cursive;
 
         width: 100px;
         position: absolute;
@@ -361,8 +361,27 @@
         transform: rotateY(-180deg) scaleX(var(--book-page-width-mod));
       }
     </style>
+    <style id="zoomStyle">
+      .zoomBtn{
+        width: 40px;height: 40px;
+
+        position: fixed;
+        right: 10px;
+        bottom: 10px;
+      }
+      #zoomInBtn{
+        bottom: 60px;
+      }
+    </style>
   </head>
-  <body>
+  <body id="body">
+    <button id="zoomInBtn" class="zoomBtn" onclick="document.getElementById('body').style.zoom = (parseFloat(document.getElementById('body').style.zoom) || 1) + 0.1">
+      [+]
+    </button>
+    <button id="zoomOutBtn" class="zoomBtn" onclick="document.getElementById('body').style.zoom = (parseFloat(document.getElementById('body').style.zoom) || 1) - 0.1">
+      [–]
+    </button>
+
     <div id="library">
         <div class="book green ">
           <div class="bookPageSide bookPageSideTop"></div>
